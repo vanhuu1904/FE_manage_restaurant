@@ -87,9 +87,9 @@ export default function App() {
         {
           index: true,
           element: (
-            <ProtectedRoute>
-              <AdminPage />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <AdminPage />
+            // </ProtectedRoute>
           ),
         },
         {

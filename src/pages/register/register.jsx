@@ -9,14 +9,13 @@ const RegisterPage = () => {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const onFinish = async (values) => {
-    const { username, password, name, phone, address, role } = values;
+    const { username, password, name, phone, address } = values;
     const dataObject = {
       username,
       password,
       name,
       phone,
       address,
-      role,
     };
     setIsSubmit(true);
     console.log(">>>check data object: ", dataObject);
@@ -111,13 +110,6 @@ const RegisterPage = () => {
                     message: "Địa chỉ không được để trống!",
                   },
                 ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                labelCol={{ span: 24 }} //whole column
-                label="Role"
-                name="role"
               >
                 <Input />
               </Form.Item>
