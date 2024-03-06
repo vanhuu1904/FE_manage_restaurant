@@ -46,12 +46,14 @@ export const accountSlide = createSlice({
     doLogoutAction: (state, action) => {
       localStorage.removeItem("access_token");
       state.isAuthenticated = false;
+      state.isLoading = false;
       state.user = {
         username: "",
         name: "",
         groupWithRoles: {},
         id: "",
       };
+      state.groupWithRoles = {};
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,

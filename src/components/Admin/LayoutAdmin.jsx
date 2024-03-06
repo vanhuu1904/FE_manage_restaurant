@@ -27,21 +27,21 @@ const items = [
     icon: <AppstoreOutlined />,
   },
   {
-    label: <span>Manage Users</span>,
-    // key: 'user',
+    label: <Link to={"/admin/user"}>Manage Users</Link>,
+    key: "user",
     icon: <UserOutlined />,
-    children: [
-      {
-        label: <Link to="/admin/user">CRUD</Link>,
-        key: "crud",
-        icon: <TeamOutlined />,
-      },
-      {
-        label: "Files1",
-        key: "file1",
-        icon: <TeamOutlined />,
-      },
-    ],
+    // children: [
+    //   {
+    //     label: <Link to="/admin/user">CRUD</Link>,
+    //     key: "crud",
+    //     icon: <TeamOutlined />,
+    //   },
+    //   {
+    //     label: "Files1",
+    //     key: "file1",
+    //     icon: <TeamOutlined />,
+    //   },
+    // ],
   },
   {
     label: <Link to="/admin/food">Manage Food</Link>,
@@ -146,7 +146,7 @@ const LayoutAdmin = () => {
           <Dropdown menu={{ items: itemsDropdown }} trigger={["click"]}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                Welcome {user?.user?.name}
+                Welcome {user?.name}
                 <DownOutlined />
               </Space>
             </a>

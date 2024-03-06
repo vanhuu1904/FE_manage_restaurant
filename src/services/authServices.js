@@ -4,7 +4,7 @@ const loginUser = (data) => {
   return axios.post("auth/login", data);
 };
 const logout = () => {
-  return axios.post("auth/logout");
+  return axios.get("auth/logout");
 };
 
 const register = (data) => {

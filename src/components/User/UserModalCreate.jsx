@@ -106,7 +106,7 @@ const UserModelCreate = (props) => {
                 },
               ]}
             >
-              <InputNumber style={{ width: "90%" }} />
+              <Input style={{ width: "90%" }} />
             </Form.Item>
           </Col>
         </Row>

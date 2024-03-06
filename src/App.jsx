@@ -25,6 +25,7 @@ import ViewOrder from "./pages/Order/ViewOrder";
 import Role from "./components/Role/Role";
 import GroupRole from "./components/GroupRole/GroupRole";
 import { fetchAccount } from "./services/authServices";
+import OrderHistory from "./pages/Order/OrderHistory";
 const Layout = () => {
   return (
     <div className="layout-app">
@@ -40,9 +41,10 @@ export default function App() {
   const isLoading = useSelector((state) => state.account.isLoading);
 
   const getAccount = async () => {
+    console.log(">>>check location: ", window.location.pathname);
     if (
-      window.location.pathname === "/auth/login" ||
-      window.location.pathname === "/auth/register"
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register"
     )
       return;
 
@@ -115,6 +117,10 @@ export default function App() {
       ],
     },
     {
+      path: "history",
+      element: <OrderHistory />,
+    },
+    {
       path: "login",
       element: <LoginPage />,
     },
@@ -128,7 +134,6 @@ export default function App() {
   return (
     <>
       {isLoading === false ||
-      isLoading === true ||
       window.location.pathname === "/login" ||
       window.location.pathname === "/register" ||
       window.location.pathname === "/" ? (

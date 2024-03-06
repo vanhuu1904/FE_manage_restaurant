@@ -1,8 +1,11 @@
 import {
   Button,
+  Checkbox,
   Col,
   Divider,
   Empty,
+  Form,
+  Input,
   InputNumber,
   Result,
   Row,
@@ -24,13 +27,19 @@ import {
 } from "../../redux/order/orderSlice";
 import { registerOrder } from "../../services/api";
 import { createOrder } from "../../services/orderService";
+import TextArea from "antd/es/input/TextArea";
+import { useNavigate } from "react-router-dom";
 
 const ViewOrder = (props) => {
   const carts = useSelector((state) => state.order.carts);
   const user = useSelector((state) => state.account.user);
-  console.log(">>> check user: ", user);
+
   const [totalPrice, setTotalPrice] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (carts && carts.length > 0) {
@@ -55,13 +64,18 @@ const ViewOrder = (props) => {
       );
     }
   };
-  const handleCreateOrder = async () => {
+  const onFinish = async (values) => {
     let userId = user?.id;
     // console.log(">>> check carts: ", carts);
-
+    const { name, phone, address } = values;
     const data = carts.map((item) => ({
       foodID: item.foodID,
       quantity: item.quantity,
+      name,
+      phone,
+      address,
+      payments: "Thanh toán khi nhận hàng",
+      totalPrice: totalPrice,
     }));
     let raw = {
       userId: userId,
@@ -72,7 +86,7 @@ const ViewOrder = (props) => {
     // console.log(">>> check res: ", res);
     if (res && res.EC === 0) {
       message.success("thanh cong");
-      setCurrentStep(1);
+      setCurrentStep(2);
       dispatch(doResetCartAction());
     }
   };
@@ -95,11 +109,14 @@ const ViewOrder = (props) => {
                 {
                   title: "Đặt hàng",
                 },
+                {
+                  title: "Thanh toán",
+                },
               ]}
             />
           </Col>
         </Row>
-        {currentStep === 0 && (
+        {currentStep !== 2 ? (
           <Row gutter={[20, 20]}>
             <Col md={18} xs={24}>
               {carts &&
@@ -143,32 +160,129 @@ const ViewOrder = (props) => {
                 </div>
               )}
             </Col>
-            <Col md={6} xs={24}>
-              <div className="order-sum">
-                <div className="calculate">
-                  {/* <span> Tạm tính</span>
+            {currentStep === 0 && (
+              <Col md={6} xs={24}>
+                <div className="order-sum">
+                  <div className="calculate">
+                    {/* <span> Tạm tính</span>
                 <span> 1.055.400đ</span> */}
+                  </div>
+                  <Divider style={{ margin: "10px 0" }} />
+                  <div className="calculate">
+                    <span> Tổng tiền</span>
+                    <span className="sum-final"> {totalPrice} ₫</span>
+                  </div>
+                  <Divider style={{ margin: "10px 0" }} />
+                  <button onClick={() => setCurrentStep(1)}>
+                    Mua Hàng ({carts.length})
+                  </button>
                 </div>
-                <Divider style={{ margin: "10px 0" }} />
-                <div className="calculate">
-                  <span> Tổng tiền</span>
-                  <span className="sum-final"> {totalPrice} ₫</span>
+              </Col>
+            )}
+            {currentStep === 1 && (
+              <Col md={6} xs={24}>
+                <div className="order-sum">
+                  <Form
+                    name="basic"
+                    // style={{ maxWidth: 600, margin: '0 auto' }}
+                    onFinish={onFinish}
+                    autoComplete="off"
+                  >
+                    <Form.Item
+                      labelCol={{ span: 24 }} //whole column
+                      label="Tên người nhận"
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Họ tên không được để trống!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelCol={{ span: 24 }} //whole column
+                      label="Số điện thoại"
+                      name="phone"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Tên đăng nhập không được để trống!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      labelCol={{ span: 24 }} //whole column
+                      label="Địa chỉ"
+                      name="address"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Địa chỉ không được để trống!",
+                        },
+                      ]}
+                    >
+                      <TextArea rows={4} />
+                    </Form.Item>
+                    <Form.Item
+                    // wrapperCol={{ offset: 6, span: 16 }}
+                    >
+                      <Checkbox checked={true}>
+                        Thanh toán khi nhận hàng
+                      </Checkbox>
+                    </Form.Item>
+                    <hr />
+                    <div
+                      style={{
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>Tổng</div>
+                      <div>
+                        <span style={{ color: "red", fontSize: "18px" }}>
+                          {totalPrice}đ
+                        </span>
+                      </div>
+                    </div>
+                    <hr />
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={isSubmit}
+                      >
+                        Đặt hàng
+                      </Button>
+                    </Form.Item>
+                  </Form>
                 </div>
-                <Divider style={{ margin: "10px 0" }} />
-                <button onClick={handleCreateOrder}>
-                  Mua Hàng ({carts.length})
-                </button>
-              </div>
-            </Col>
+              </Col>
+            )}
           </Row>
-        )}
-        {currentStep === 1 && (
+        ) : (
           <Row gutter={[20, 20]}>
             <Col md={24} xs={24}>
               <Result
                 icon={<SmileOutlined />}
                 title={"Đơn hàng đã được đặt thành công"}
-                extra={<Button type="primary">Xem lịch sử</Button>}
+                extra={
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      navigate("/history");
+                    }}
+                  >
+                    Xem lịch sử
+                  </Button>
+                }
               />
             </Col>
           </Row>

@@ -263,7 +263,7 @@ const Home = () => {
             </Form.Item>
           </Form>
         </Col> */}
-        <Col md={20} xs={24} style={{ border: "1px solid white" }}>
+        <Col md={24} xs={24} style={{ border: "1px solid white" }}>
           <Row>
             <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
           </Row>
@@ -303,7 +303,7 @@ const Home = () => {
           </Row>
           <Divider />
           <Row style={{ display: "flex", justifyContent: "center" }}>
-            <Pagination defaultCurrent={6} total={1} responsive />
+            <Pagination defaultCurrent={12} total={3} responsive pageSize={4} />
           </Row>
         </Col>
       </Row>

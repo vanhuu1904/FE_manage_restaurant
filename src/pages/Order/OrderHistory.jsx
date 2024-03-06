@@ -1,23 +1,130 @@
-import React, { useState } from "react";
-import { FaReact } from "react-icons/fa";
-import { FiShoppingCart } from "react-icons/fi";
-import { VscSearchFuzzy } from "react-icons/vsc";
-import { Divider, Badge, Drawer, message, Avatar, Popover } from "antd";
+import {
+  Avatar,
+  Badge,
+  Divider,
+  Drawer,
+  Dropdown,
+  Popover,
+  Space,
+  Table,
+} from "antd";
+import { useEffect, useState } from "react";
+import { getOrderByUserId } from "../../services/orderService";
 import { useDispatch, useSelector } from "react-redux";
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
-import { useNavigate } from "react-router";
-// import { callLogout } from "../../services/api";
-import "./header.scss";
+import moment from "moment";
+import { Link, useNavigate } from "react-router-dom";
 import { doLogoutAction } from "../../redux/account/accountSlice";
-import "../../styles/global.scss";
+import { FaReact } from "react-icons/fa";
+import { VscSearchFuzzy } from "react-icons/vsc";
+import { FiShoppingCart } from "react-icons/fi";
+import { DownOutlined } from "@ant-design/icons";
 import urlAvatar from "../../../public/anh.jpg";
-import { Link } from "react-router-dom";
-import { logout } from "../../services/authServices";
-const Header = () => {
+import ReactJson from "react-json-view";
+const OrderHistory = () => {
+  const [dataSource, setDataSource] = useState([]);
+  const user = useSelector((state) => state.account.user);
+  useEffect(() => {
+    console.log(">>>check data source: ", dataSource);
+    fetchAllOrderByUser();
+  }, []);
+  const fetchAllOrderByUser = async () => {
+    let data = await getOrderByUserId(user.id);
+    console.log(">>>check data: ", data);
+    if (data && data.EC === 0) {
+      let res = data.DT;
+      if (res && res.length > 0) {
+        // Tạo một đối tượng để lưu trữ các phần tử gom nhóm theo orderItemId
+        let groupedItems = {};
+
+        // Lặp qua từng phần tử trong mảng items và gom nhóm chúng
+        res.forEach((item) => {
+          // Nếu orderItemId đã tồn tại trong groupedItems, thêm phần tử vào mảng tương ứng
+          if (groupedItems[item.orderItemId]) {
+            groupedItems[item.orderItemId].push(item);
+          } else {
+            // Nếu orderItemId chưa tồn tại trong groupedItems, tạo một mảng mới và thêm phần tử vào
+            groupedItems[item.orderItemId] = [item];
+          }
+        });
+        console.log(">>>check group item object: ", groupedItems);
+        // Chuyển groupedItems từ đối tượng sang mảng
+        let groupedItemsArray = Object.values(groupedItems);
+        console.log(">>>check group groupedItemsArray: ", groupedItemsArray);
+
+        let dataOrder = [];
+        groupedItemsArray.map((item, index) => {
+          let order = [];
+          item &&
+            item.length > 0 &&
+            item.map((food, index) => {
+              let orderItem = {
+                foodId: food.foodId,
+                quantity: food.quantity,
+                image: food.Food.image,
+                name: food.Food.name,
+              };
+              order.push(orderItem);
+            });
+          let res = {
+            orderItemId: item[0].orderItemId,
+            name: item[0].name,
+            phone: item[0].phone,
+            address: item[0].address,
+            totalPrice: item[0].totalPrice,
+            status: item[0].status,
+            userId: item[0].userId,
+            createdAt: moment(item[0].createdAt).format("DD-MM-YYYY HH:mm:ss"),
+            food: order,
+            id: index,
+          };
+          dataOrder.push(res);
+        });
+        setDataSource(dataOrder);
+      }
+    }
+  };
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "id",
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "createdAt",
+    },
+    {
+      title: "Tổng số tiền",
+      dataIndex: "totalPrice",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+    },
+    {
+      title: "Địa chỉ nhận hàng",
+      dataIndex: "address",
+    },
+    {
+      title: "Chi tiết đơn hàng",
+      dataIndex: "Food",
+      render: (text, record, index) => {
+        console.log(">>>check record: ", record);
+        return (
+          <ReactJson
+            src={record.food}
+            theme={"monkai"}
+            name={"Chi tiết đơn mua"}
+            displayDataTypes={false}
+            displayArrayKey={false}
+            collapsed={true}
+          />
+        );
+      },
+    },
+  ];
+
   const [openDrawer, setOpenDrawer] = useState(false);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-  const user = useSelector((state) => state.account.user);
   const account = useSelector((state) => state.account);
 
   const carts = useSelector((state) => state.order.carts);
@@ -46,7 +153,7 @@ const Header = () => {
     },
     {
       label: <Link to={"/history"}>Xem đơn hàng</Link>,
-      key: "history",
+      key: "account",
     },
     {
       label: (
@@ -189,8 +296,11 @@ const Header = () => {
         <p onClick={handleLogout}>Đăng xuất</p>
         <Divider />
       </Drawer>
+      <div style={{ padding: "20px" }}>
+        <h3>Lịch sử đặt hàng</h3>
+        <Table dataSource={dataSource} columns={columns} />;
+      </div>
     </>
   );
 };
-
-export default Header;
+export default OrderHistory;
