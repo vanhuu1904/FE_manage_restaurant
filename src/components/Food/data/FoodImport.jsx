@@ -7,7 +7,6 @@ import templateFile from "./templateFile.xlsx?url";
 import { createAllFoods } from "../../../services/foodService";
 const FoodImport = (props) => {
   const { openModalImport, setOpenModalImport } = props;
-  console.log("check : ", openModalImport);
   const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
       onSuccess("ok");
@@ -23,10 +22,8 @@ const FoodImport = (props) => {
       ".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     customRequest: dummyRequest,
     onChange(info) {
-      console.log(">>>>check info: ", info);
       const { status } = info.file;
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
       }
       if (status === "done") {
         if (info.fileList && info.fileList.length > 0) {
@@ -41,11 +38,9 @@ const FoodImport = (props) => {
               header: ["name", "price", "status", "sold", "image"],
               range: 1,
             });
-            console.log(">>> check json: ", json);
             if (json && json.length > 0) {
               setDataExcel(json);
             }
-            console.log(">>>> check dataExcel: ", dataExcel);
           };
         }
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -59,7 +54,6 @@ const FoodImport = (props) => {
   };
   const handleSubmit = async () => {
     let res = await createAllFoods(dataExcel);
-    console.log(">>>check res:", res);
     if (res && res.EC === 0) {
       message.success("Thêm mới đồ ăn thành công!");
       setOpenModalImport(false);

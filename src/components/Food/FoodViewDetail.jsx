@@ -10,7 +10,6 @@ const FoodViewDetail = (props) => {
     dataViewDetail,
     setDataViewDetail,
   } = props;
-  console.log(">>> check data: ", dataViewDetail);
   const onClose = () => {
     setOpenViewDetail(false);
     setDataViewDetail(null);
@@ -41,7 +40,6 @@ const FoodViewDetail = (props) => {
       }
       setFileList([img]);
       setPreviewImage(dataViewDetail.image);
-      console.log(">>> check preview image: ", previewImage);
     }
   }, [dataViewDetail]);
 

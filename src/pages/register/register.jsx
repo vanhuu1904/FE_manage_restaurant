@@ -18,9 +18,7 @@ const RegisterPage = () => {
       address,
     };
     setIsSubmit(true);
-    console.log(">>>check data object: ", dataObject);
     const res = await register(dataObject);
-    console.log(">>> check res: ", res);
     setIsSubmit(false);
     if (res && res.EC === 0) {
       message.success("Đăng ký tài khoản thành công!");

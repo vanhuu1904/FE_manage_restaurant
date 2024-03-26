@@ -43,7 +43,6 @@ const Role = () => {
     if (res && res.EC === 0) {
       setListRole(res.DT);
     }
-    console.log(">>>check res: ", res);
   };
   const handleOnChangeInput = (name, value, key) => {
     let _listChilds = _.cloneDeep(listChilds);
@@ -60,7 +59,7 @@ const Role = () => {
     setListChilds(_listChilds);
   };
   const handleRemoveInput = (key) => {
-    console.log(">>>check key: ", key);
+    ">>>check key: ", key;
     let _listChilds = _.cloneDeep(listChilds);
     delete _listChilds[key];
     setListChilds(_listChilds);
@@ -96,13 +95,11 @@ const Role = () => {
     } else {
       // call api
       let data = buildDataToPersist();
-      console.log(">>>check data: ", data);
       let res = await createRoles(data);
       if (res && res.EC === 0) {
         message.success(res.EM);
         setListChilds({ child1: defaulValueChild });
         await fetchRoles();
-        console.log(">>>check list child: ", listChilds);
       } else {
         message.error(res.EM);
       }

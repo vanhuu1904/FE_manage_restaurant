@@ -21,7 +21,6 @@ const FoodModalCreate = (props) => {
   // const handleCancel = () => setPreviewOpen(false);
   const onFinish = async (values) => {
     const { name, price, status, image } = values;
-    console.log(">>>check data: ", { name, price, status, image });
     setIsSubmit(true);
     const data = {
       name,
@@ -31,7 +30,6 @@ const FoodModalCreate = (props) => {
     };
     const res = await createFood(data);
     setIsSubmit(false);
-    console.log(">>>check res: ", res);
     if (res && res.data) {
       message.success("Tạo mới food thành công");
       form.resetFields();

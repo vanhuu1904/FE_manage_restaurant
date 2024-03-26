@@ -21,14 +21,12 @@ const UserModalUpdate = (props) => {
 
   useEffect(() => {
     form.setFieldsValue(dataUpdate);
-    console.log(">>>check data: ", dataUpdate);
   }, [dataUpdate]);
 
   const onFinish = async (values) => {
     const { id, name, studentcode, address, groupId } = values;
     setIsSubmit(true);
     const res = await updateUser({ id, name, studentcode, address, groupId });
-    console.log(">>>check res: ", res);
     setIsSubmit(false);
     if (res && +res.EC === 0) {
       message.success("Update user thành công");

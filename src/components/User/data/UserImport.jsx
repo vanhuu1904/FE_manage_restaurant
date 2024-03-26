@@ -22,7 +22,6 @@ const UserImport = (props) => {
     // action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
     customRequest: dummyRequest,
     onChange(info) {
-      console.log(">>>>check info: ", info);
       const { status } = info.file;
       if (status !== "uploading") {
         console.log(info.file, info.fileList);
@@ -37,12 +36,10 @@ const UserImport = (props) => {
             const workbook = XLSX.read(data, { type: "array" });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
             const json = XLSX.utils.sheet_to_json(sheet, {
-              header: ["name", "price", "status", "image"],
+              header: ["username", "password", "name", "address", "phone"],
               range: 1,
             });
-            console.log(">>> check json: ", json);
             if (json && json.length > 0) setDataExcel(json);
-            console.log(">>>> check dataExcel: ", dataExcel);
           };
         }
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -94,10 +91,11 @@ const UserImport = (props) => {
             dataSource={dataExcel}
             title={() => <span>Dữ liệu upload: </span>}
             columns={[
-              { dataIndex: "name", title: "Tên món ăn" },
-              { dataIndex: "status", title: "Trạng thái" },
-              { dataIndex: "price", title: "Giá" },
-              { dataIndex: "image", title: "Ảnh" },
+              { dataIndex: "username", title: "Tên đăng nhập" },
+              { dataIndex: "password", title: "Mật khẩu" },
+              { dataIndex: "name", title: "Họ và tên" },
+              { dataIndex: "address", title: "Địa chỉ" },
+              { dataIndex: "phone", title: "Số điện thoại" },
             ]}
           />
         </div>

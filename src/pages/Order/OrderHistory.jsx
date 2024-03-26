@@ -7,6 +7,7 @@ import {
   Popover,
   Space,
   Table,
+  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import { getOrderByUserId } from "../../services/orderService";
@@ -20,12 +21,13 @@ import { FiShoppingCart } from "react-icons/fi";
 import { DownOutlined } from "@ant-design/icons";
 import urlAvatar from "../../../public/anh.jpg";
 import ReactJson from "react-json-view";
+import { logout } from "../../services/authServices";
 const OrderHistory = () => {
   const [dataSource, setDataSource] = useState([]);
   const user = useSelector((state) => state.account.user);
   useEffect(() => {
-    console.log(">>>check data source: ", dataSource);
     fetchAllOrderByUser();
+    console.log(">>>check dataOrder: ", dataSource);
   }, []);
   const fetchAllOrderByUser = async () => {
     let data = await getOrderByUserId(user.id);
@@ -46,10 +48,8 @@ const OrderHistory = () => {
             groupedItems[item.orderItemId] = [item];
           }
         });
-        console.log(">>>check group item object: ", groupedItems);
         // Chuyển groupedItems từ đối tượng sang mảng
         let groupedItemsArray = Object.values(groupedItems);
-        console.log(">>>check group groupedItemsArray: ", groupedItemsArray);
 
         let dataOrder = [];
         groupedItemsArray.map((item, index) => {
@@ -71,7 +71,10 @@ const OrderHistory = () => {
             phone: item[0].phone,
             address: item[0].address,
             totalPrice: item[0].totalPrice,
-            status: item[0].status,
+            status:
+              item[0].OrderItem.status === 0
+                ? "Đang chuẩn bị hàng"
+                : "Đang giao hàng",
             userId: item[0].userId,
             createdAt: moment(item[0].createdAt).format("DD-MM-YYYY HH:mm:ss"),
             food: order,
@@ -108,7 +111,7 @@ const OrderHistory = () => {
       title: "Chi tiết đơn hàng",
       dataIndex: "Food",
       render: (text, record, index) => {
-        console.log(">>>check record: ", record);
+        console.log(">>check record: ", record);
         return (
           <ReactJson
             src={record.food}
@@ -133,6 +136,7 @@ const OrderHistory = () => {
 
   const handleLogout = async () => {
     const res = await logout();
+    console.log(">>>check res: ", res);
     if (res && res.EC === 0) {
       dispatch(doLogoutAction());
       message.success("Đăng xuất thành công");
@@ -153,7 +157,7 @@ const OrderHistory = () => {
     },
     {
       label: <Link to={"/history"}>Xem đơn hàng</Link>,
-      key: "account",
+      key: "history",
     },
     {
       label: (

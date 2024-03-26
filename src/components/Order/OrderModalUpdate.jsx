@@ -10,9 +10,9 @@ import {
   notification,
 } from "antd";
 import { Checkbox, Form, Input } from "antd";
-import { createANewUser, updateAUser } from "../../services/api";
+import { updateOrder } from "../../services/orderService";
 
-const ShipperModalUpdate = (props) => {
+const OrderModalUpdate = (props) => {
   const { openModalUpdate, setOpenModalUpdate, dataUpdate, setDataUpdate } =
     props;
   const [isSubmit, setIsSubmit] = useState(false);
@@ -24,20 +24,16 @@ const ShipperModalUpdate = (props) => {
   }, [dataUpdate]);
 
   const onFinish = async (values) => {
-    const { _id, fullname, studentcode, address } = values;
+    const { id, status } = values;
     setIsSubmit(true);
-    const res = await updateAUser(_id, fullname, studentcode, address);
-    console.log(">>>check res: ", res);
+    const res = await updateOrder({ id, status });
     setIsSubmit(false);
-    if (res && +res.statusCode === 200) {
-      message.success("Update user thành công");
+    if (res && +res.EC === 0) {
+      message.success("Update order thành công");
       setOpenModalUpdate(false);
-      await props.fetchUsers();
+      await props.fetchOrder();
     } else {
-      notification.error({
-        message: "Đã có lỗi xảy ra",
-        description: res.message,
-      });
+      message.error(res.EM);
     }
   };
 
@@ -60,26 +56,14 @@ const ShipperModalUpdate = (props) => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
       >
-        <Form.Item label="Id" labelCol={{ span: 24 }} name="_id" hidden>
+        <Form.Item label="Id" labelCol={{ span: 24 }} name="id" hidden>
           <Input />
         </Form.Item>
         <Row gutter={20 - 24}>
           <Col xs={24} sm={24} md={12}>
             <Form.Item
               labelCol={{ span: 24 }}
-              name="username"
-              label="Username"
-              rules={[
-                { required: true, message: "Username không được để trống" },
-              ]}
-            >
-              <Input disabled style={{ width: "90%" }} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={24} md={12}>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              name="fullname"
+              name="name"
               label="Họ và tên"
               rules={[
                 { required: true, message: "Họ và tên không được để trống" },
@@ -93,17 +77,17 @@ const ShipperModalUpdate = (props) => {
           <Col xs={24} sm={24} md={12}>
             <Form.Item
               labelCol={{ span: 24 }}
-              name="studentcode"
-              label="Mã số sinh viên"
+              name="phone"
+              label="Số điện thoại"
               rules={[
                 {
                   required: true,
-                  message: "Mã số sinh viên không được để trống",
+                  message: "Số điện thoại không được để trống",
                   // pattern: new RegExp(/^[0-9]+$/)
                 },
               ]}
             >
-              <InputNumber style={{ width: "90%" }} />
+              <Input disabled style={{ width: "90%" }} />
             </Form.Item>
           </Col>
           <Col xs={24} sm={24} md={12}>
@@ -115,6 +99,30 @@ const ShipperModalUpdate = (props) => {
                 { required: true, message: "Địa chỉ không được để trống" },
               ]}
             >
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item
+              label="Trạng thái"
+              labelCol={{ span: 24 }}
+              name="status"
+              rules={[
+                { required: true, message: "Trạng thái không được để trống" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item
+              label="Giá tiền"
+              labelCol={{ span: 24 }}
+              name="totalPrice"
+              rules={[
+                { required: true, message: "Trạng thái không được để trống" },
+              ]}
+            >
               <Input />
             </Form.Item>
           </Col>
@@ -124,4 +132,4 @@ const ShipperModalUpdate = (props) => {
   );
 };
 
-export default ShipperModalUpdate;
+export default OrderModalUpdate;

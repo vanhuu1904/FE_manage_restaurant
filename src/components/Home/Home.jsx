@@ -30,7 +30,6 @@ const Home = () => {
   const fetchFood = async () => {
     // const res = await
     const res = await fetchAllFoods();
-    console.log(">>>> check res: ", res);
     if (res && res.EC === 0) {
       setListFood(res.DT);
     }
@@ -39,9 +38,7 @@ const Home = () => {
   const onFinish = (values) => {};
 
   const onChange = async (key) => {
-    console.log(key);
     let res = await getFoodsByName(key);
-    console.log(">>>>check res data by name: ", res);
     if (res && res.EC === 0) {
       setListFood(res.DT);
     }
@@ -123,7 +120,6 @@ const Home = () => {
   };
 
   const handleRedirectFood = (food) => {
-    console.log(">>> check food: ", food);
     const slug = convertSlug(food.name);
     navigate(`food/${slug}?id=${food.id}`);
     // navigate(`food/a?id=${food.id}`);

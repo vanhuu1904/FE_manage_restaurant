@@ -21,7 +21,6 @@ const LoginPage = () => {
     };
     setIsSubmit(true);
     const res = await loginUser(data);
-    console.log("check res: ", res);
     setIsSubmit(false);
     if (res && res.EC === 0) {
       localStorage.setItem("access_token", res.DT.access_token);

@@ -1,10 +1,8 @@
 import { Row, Col, Rate, Divider, Button } from "antd";
 import "./book.scss";
-import ImageGallery from "react-image-gallery";
 import { useEffect, useRef, useState } from "react";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
-import ModalGallery from "./modalGallery";
 import { useDispatch } from "react-redux";
 import { doAddFoodAction } from "../../redux/order/orderSlice";
 
@@ -15,22 +13,10 @@ const ViewDetail = (props) => {
   const [currentQuantity, setCurrentQuantity] = useState(1);
   const refGallery = useRef(null);
   const dispatch = useDispatch();
-  const handleOnClickImage = () => {
-    //get current index onClick
-    // alert(refGallery?.current?.getCurrentIndex());
-    setIsOpenModalGallery(true);
-    setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
-    // refGallery?.current?.fullScreen()
-  };
-  useEffect(() => {
-    console.log(">>>check data food: ", dataFood);
-  }, []);
-
   const onChange = (value) => {
     console.log("changed", value);
   };
   const handleAddToCart = (quantity, food) => {
-    console.log(">>>check quantity: ", quantity, "check food: ", food);
     dispatch(doAddFoodAction({ quantity, detail: food, foodID: food?.id }));
   };
   const handleChangeButton = (type) => {
@@ -50,6 +36,9 @@ const ViewDetail = (props) => {
       }
     }
   };
+  const handleBuy = () => {
+    handleAddToCart(currentQuantity, dataFood);
+  };
   return (
     <div style={{ background: "#efefef", padding: "20px 0" }}>
       <div
@@ -68,29 +57,8 @@ const ViewDetail = (props) => {
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
                 alt=""
               />
-              {/* <ImageGallery
-                ref={refGallery}
-                items={images}
-                showPlayButton={false} //hide play button
-                showFullscreenButton={false} //hide fullscreen button
-                renderLeftNav={() => <></>} //left arrow === <> </>
-                renderRightNav={() => <></>} //right arrow === <> </>
-                slideOnThumbnailOver={true} //onHover => auto scroll images
-                onClick={() => handleOnClickImage()}
-              /> */}
             </Col>
             <Col md={14} sm={24}>
-              {/* <Col md={0} sm={24} xs={24}>
-                <ImageGallery
-                  ref={refGallery}
-                  items={images}
-                  showPlayButton={false} //hide play button
-                  showFullscreenButton={false} //hide fullscreen button
-                  renderLeftNav={() => <></>} //left arrow === <> </>
-                  renderRightNav={() => <></>} //right arrow === <> </>
-                  showThumbnails={false}
-                />
-              </Col> */}
               <Col span={24}>
                 <div className="title">{dataFood?.name}</div>
                 <div className="rating">
@@ -141,20 +109,15 @@ const ViewDetail = (props) => {
                     <BsCartPlus className="icon-cart" />
                     <span>Thêm vào giỏ hàng</span>
                   </button>
-                  <button className="now">Mua ngay</button>
+                  <button className="now" onClick={handleBuy}>
+                    Mua ngay
+                  </button>
                 </div>
               </Col>
             </Col>
           </Row>
         </div>
       </div>
-      {/* <ModalGallery
-        isOpen={isOpenModalGallery}
-        setIsOpen={setIsOpenModalGallery}
-        currentIndex={currentIndex}
-        items={images}
-        title={"hardcode"}
-      /> */}
     </div>
   );
 };

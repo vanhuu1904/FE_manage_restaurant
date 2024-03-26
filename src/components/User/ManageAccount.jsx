@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Modal, Tabs, message, notification } from "antd";
 import { Checkbox, Form, Input } from "antd";
-import { createANewUser } from "../../services/api";
 import InfoAccount from "./InfoAccount";
 import ChangePassword from "./ChangePassword";
 
@@ -22,7 +21,6 @@ const ManageAccount = (props) => {
       address
     );
     setIsSubmit(false);
-    console.log(">>>check res: ", res);
     if (res && res.data) {
       message.success("Tạo mới user thành công");
       form.resetFields();

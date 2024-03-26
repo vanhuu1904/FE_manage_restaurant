@@ -6,4 +6,12 @@ const createOrder = (data) => {
 const getOrderByUserId = (userId) => {
   return axios.get(`/order/history/${userId}`);
 };
-export { createOrder, getOrderByUserId };
+
+const updateOrder = (data) => {
+  return axios.put(`/orderItem/update`, data);
+};
+
+const getAllOrder = () => {
+  return axios.get(`/orderItem/read`);
+};
+export { createOrder, getOrderByUserId, updateOrder, getAllOrder };

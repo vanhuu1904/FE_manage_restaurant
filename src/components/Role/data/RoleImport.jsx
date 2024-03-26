@@ -7,7 +7,6 @@ import templateFile from "./templateFile.xlsx?url";
 import { createRoles } from "../../../services/roleService";
 const RoleImport = (props) => {
   const { openModalImport, setOpenModalImport } = props;
-  console.log("check : ", openModalImport);
   const dummyRequest = ({ file, onSuccess }) => {
     setTimeout(() => {
       onSuccess("ok");
@@ -23,7 +22,6 @@ const RoleImport = (props) => {
       ".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     customRequest: dummyRequest,
     onChange(info) {
-      console.log(">>>>check info: ", info);
       const { status } = info.file;
       if (status !== "uploading") {
         console.log(info.file, info.fileList);
@@ -41,11 +39,9 @@ const RoleImport = (props) => {
               header: ["url", "description"],
               range: 1,
             });
-            console.log(">>> check json: ", json);
             if (json && json.length > 0) {
               setDataExcel(json);
             }
-            console.log(">>>> check dataExcel: ", dataExcel);
           };
         }
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -59,7 +55,6 @@ const RoleImport = (props) => {
   };
   const handleSubmit = async () => {
     let res = await createRoles(dataExcel);
-    console.log(">>>check res:", res);
     if (res && res.EC === 0) {
       message.success("Thêm mới role thành công!");
       setOpenModalImport(false);

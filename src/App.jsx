@@ -3,11 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ContactPage from "./pages/contact";
 import LoginPage from "./pages/login/login";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Home from "./components/Home";
+import Home from "./components/Home/Home";
 import RegisterPage from "./pages/register/register";
-import { callFetchAccount } from "./services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { doGetAccountAction } from "./redux/account/accountSlice";
 import Loading from "./components/Loading/loading";
@@ -18,7 +15,6 @@ import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import "./styles/reset.scss";
 import "./styles/global.scss";
 import UserTable from "./components/User/UserTable";
-import ShipperTable from "./components/Shipper/ShipperTable";
 import FoodTable from "./components/Food/FoodTable";
 import FoodPage from "./pages/food";
 import ViewOrder from "./pages/Order/ViewOrder";
@@ -26,6 +22,8 @@ import Role from "./components/Role/Role";
 import GroupRole from "./components/GroupRole/GroupRole";
 import { fetchAccount } from "./services/authServices";
 import OrderHistory from "./pages/Order/OrderHistory";
+import Order from "./components/Order/Order";
+import Header from "./components/Header/Header";
 const Layout = () => {
   return (
     <div className="layout-app">
@@ -41,7 +39,6 @@ export default function App() {
   const isLoading = useSelector((state) => state.account.isLoading);
 
   const getAccount = async () => {
-    console.log(">>>check location: ", window.location.pathname);
     if (
       window.location.pathname === "/login" ||
       window.location.pathname === "/register"
@@ -89,30 +86,50 @@ export default function App() {
         {
           index: true,
           element: (
-            // <ProtectedRoute>
-            <AdminPage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
           ),
         },
         {
           path: "user",
-          element: <UserTable />,
+          element: (
+            <ProtectedRoute>
+              <UserTable />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "food",
-          element: <FoodTable />,
+          element: (
+            <ProtectedRoute>
+              <FoodTable />
+            </ProtectedRoute>
+          ),
         },
         {
-          path: "shipper",
-          element: <ShipperTable />,
+          path: "order",
+          element: (
+            <ProtectedRoute>
+              <Order />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "role",
-          element: <Role />,
+          element: (
+            <ProtectedRoute>
+              <Role />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "groupRole",
-          element: <GroupRole />,
+          element: (
+            <ProtectedRoute>
+              <GroupRole />
+            </ProtectedRoute>
+          ),
         },
       ],
     },

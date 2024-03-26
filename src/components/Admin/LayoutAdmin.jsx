@@ -30,18 +30,6 @@ const items = [
     label: <Link to={"/admin/user"}>Manage Users</Link>,
     key: "user",
     icon: <UserOutlined />,
-    // children: [
-    //   {
-    //     label: <Link to="/admin/user">CRUD</Link>,
-    //     key: "crud",
-    //     icon: <TeamOutlined />,
-    //   },
-    //   {
-    //     label: "Files1",
-    //     key: "file1",
-    //     icon: <TeamOutlined />,
-    //   },
-    // ],
   },
   {
     label: <Link to="/admin/food">Manage Food</Link>,
@@ -51,11 +39,6 @@ const items = [
   {
     label: <Link to="/admin/order">Manage Orders</Link>,
     key: "order",
-    icon: <DollarCircleOutlined />,
-  },
-  {
-    label: <Link to="/admin/shipper">Manage Shipper</Link>,
-    key: "shipper",
     icon: <DollarCircleOutlined />,
   },
   {

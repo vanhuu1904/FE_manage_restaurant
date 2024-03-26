@@ -59,7 +59,6 @@ const GroupRole = () => {
   const handleChange = async (value) => {
     setSelectGroup(value);
     let data = await fetchRolesByGroup(value);
-    console.log(">>>check data: ", data);
     if (data && data.EC === 0) {
       let result = buildDataToPersist(data.DT.Roles, listRoles);
       setAssignRolesByGroup(result);
@@ -71,12 +70,10 @@ const GroupRole = () => {
     let foundIndex = _assignRolesByGroup.findIndex(
       (item) => +item.id === +value
     );
-    console.log(">>check found: ", foundIndex);
     if (foundIndex > -1) {
       _assignRolesByGroup[foundIndex].isAssign =
         !_assignRolesByGroup[foundIndex].isAssign;
       setAssignRolesByGroup(_assignRolesByGroup);
-      console.log(">>assign role: ", assignRolesByGroup);
     }
   };
   const buildDataToSave = () => {
@@ -96,14 +93,13 @@ const GroupRole = () => {
   };
   const handleSave = async () => {
     let data = buildDataToSave();
-    console.log(">>>check data truoc khi call api: ", data);
+    ">>>check data truoc khi call api: ", data;
     let res = await assignRolesToGroup(data);
     if (res && res.EC === 0) {
       message.success(res.EM);
     } else {
       message.error(res.EM);
     }
-    console.log(">>check data: ", data);
   };
 
   return (

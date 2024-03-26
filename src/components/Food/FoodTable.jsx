@@ -36,7 +36,6 @@ const FoodTable = () => {
 
   const fetchFoods = async () => {
     const res = await fetchAllFoods();
-    console.log(">>> check res: ", res);
     if (res && res.EC === 0) {
       setListFood(res.DT);
     }
@@ -87,7 +86,6 @@ const FoodTable = () => {
 
   const handleDeleteFood = async (id) => {
     let res = await deleteFood(id);
-    console.log(">>>check res: ", res);
     if (res.EC === 0) {
       message.success("Xóa đồ ăn thành công");
       fetchFoods();
@@ -106,7 +104,6 @@ const FoodTable = () => {
             onClick={() => {
               setDataViewDetail(record);
               setOpenViewDetail(true);
-              console.log(">>> check data: ", record);
             }}
           >
             {record.id}

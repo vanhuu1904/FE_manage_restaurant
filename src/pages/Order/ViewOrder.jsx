@@ -25,7 +25,6 @@ import {
   doResetCartAction,
   doUpdateCartAction,
 } from "../../redux/order/orderSlice";
-import { registerOrder } from "../../services/api";
 import { createOrder } from "../../services/orderService";
 import TextArea from "antd/es/input/TextArea";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +65,6 @@ const ViewOrder = (props) => {
   };
   const onFinish = async (values) => {
     let userId = user?.id;
-    // console.log(">>> check carts: ", carts);
     const { name, phone, address } = values;
     const data = carts.map((item) => ({
       foodID: item.foodID,
@@ -81,9 +79,7 @@ const ViewOrder = (props) => {
       userId: userId,
       OrderItemsIN: data,
     };
-    console.log(">>> check data1: ", raw);
     let res = await createOrder(raw);
-    // console.log(">>> check res: ", res);
     if (res && res.EC === 0) {
       message.success("thanh cong");
       setCurrentStep(2);
@@ -121,9 +117,8 @@ const ViewOrder = (props) => {
             <Col md={18} xs={24}>
               {carts &&
                 carts?.map((item, index) => {
-                  // console.log(">>> check item: ", item);
+                  // (">>> check item: ", item);
                   let tong = +item?.quantity * +item?.detail?.price;
-                  // console.log(">>> check tong: ", tong);
                   return (
                     <div className="order-book">
                       <div className="book-content">

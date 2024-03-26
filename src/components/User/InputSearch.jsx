@@ -27,8 +27,6 @@ const InputSearch = (props) => {
     if (query) {
       props.handleSearch(query);
     }
-
-    console.log("Received values of form: ", values);
   };
 
   return (

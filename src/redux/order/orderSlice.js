@@ -17,7 +17,6 @@ export const orderSlide = createSlice({
     doAddFoodAction: (state, action) => {
       let carts = state.carts;
       const item = action.payload;
-      console.log(">>>check item: ", item);
 
       let isExistIndex = carts.findIndex((c) => c.foodID === item.foodID);
       if (isExistIndex > -1) {

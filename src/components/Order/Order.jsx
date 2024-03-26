@@ -1,36 +1,21 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  Row,
-  Col,
-  Popover,
-  Popconfirm,
-  message,
-  notification,
-} from "antd";
-import InputSearch from "./InputSearch";
+import { Table, Row, Col, Popconfirm, message } from "antd";
 import { Button } from "antd";
-import { FaPlus } from "react-icons/fa";
 import { IoReloadOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiEditAlt } from "react-icons/bi";
-import UserViewDetail from "./UserViewDetail";
-import UserModelCreate from "./UserModalCreate";
-import UserModalUpdate from "./UserModalUpdate";
 import {
   CloudUploadOutlined,
   ExportOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import UserImport from "./data/UserImport";
-import { deleteUser, fetchAllUsers } from "../../services/userService";
-// https://stackblitz.com/run?file=demo.tsx
-const UserTable = () => {
-  const [listUser, setListUser] = useState([]);
 
+import { getAllOrder } from "../../services/orderService";
+import OrderModalUpdate from "./OrderModalUpdate";
+const Order = () => {
+  const [listOrder, setListOrder] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openModalCreate, setOpenModalCreate] = useState(false);
-
   // View Detail
   const [openViewDetail, setOpenViewDetail] = useState(false);
   const [dataViewDetail, setDataViewDetail] = useState();
@@ -43,28 +28,31 @@ const UserTable = () => {
   const [openModalImport, setOpenModalImport] = useState(false);
 
   useEffect(() => {
-    fetchUsers();
+    fetchOrder();
   }, []);
-  const fetchUsers = async () => {
-    const res = await fetchAllUsers();
+
+  const fetchOrder = async () => {
+    const res = await getAllOrder();
+    console.log(">>>check res: ", res);
+
     if (res && res.EC === 0) {
-      setListUser(res.DT);
+      const data = res.DT.map((item) => {
+        return {
+          id: item.id,
+          status: item.status,
+          name: item.Orders[0].name,
+          phone: item.Orders[0].phone,
+          address: item.Orders[0].address,
+          totalPrice: item.Orders[0].totalPrice,
+        };
+      });
+      setListOrder(data);
     }
   };
-
-  const handleExportData = () => {
-    if (listUser.length > 0) {
-      const worksheet = XLSX.utils.json_to_sheet(listUser);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-      XLSX.writeFile(workbook, "ExportUser.csv");
-    }
-  };
-
   const renderHeader = () => {
     return (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span>Table List User</span>
+        <span>Table List Food</span>
         <span style={{ display: "flex", gap: 15 }}>
           <Button
             icon={<ExportOutlined />}
@@ -105,11 +93,11 @@ const UserTable = () => {
     setFilter(query);
   };
 
-  const handleDeleteUser = async (id) => {
-    let res = await deleteUser(id);
-    if (res && res.EC === 0) {
-      message.success("Xóa user thành công");
-      fetchUsers();
+  const handleDeleteFood = async (id) => {
+    let res = await deleteFood(id);
+    if (res.EC === 0) {
+      message.success("Xóa đồ ăn thành công");
+      // fetchFoods();
     } else {
       notification.error(res.EM);
     }
@@ -133,7 +121,7 @@ const UserTable = () => {
       },
     },
     {
-      title: "Họ và tên",
+      title: "Tên",
       dataIndex: "name",
       sorter: true,
     },
@@ -148,15 +136,24 @@ const UserTable = () => {
       sorter: true,
     },
     {
+      title: "Trạng thái",
+      dataIndex: "status",
+      sorter: true,
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "totalPrice",
+    },
+    {
       title: "Action",
       render: (text, record, index) => {
         return (
           <>
-            <Popconfirm
+            {/* <Popconfirm
               placement="topLeft"
-              title="Xác nhận xóa user"
-              onConfirm={() => handleDeleteUser(record.id)}
-              description="Bạn có chắc chắn muốn xóa user này?"
+              title="Xác nhận xóa món ăn"
+              onConfirm={() => handleDeleteFood(record.id)}
+              description="Bạn có chắc chắn muốn xóa món ăn này?"
               okText="Xác nhận"
               cancelText="Hủy"
             >
@@ -167,7 +164,7 @@ const UserTable = () => {
                   size={20}
                 />
               </span>
-            </Popconfirm>
+            </Popconfirm> */}
             <BiEditAlt
               style={{ cursor: "pointer", marginLeft: 20 }}
               color="#f57800"
@@ -192,36 +189,20 @@ const UserTable = () => {
             title={renderHeader}
             columns={columns}
             loading={isLoading}
-            dataSource={listUser}
+            dataSource={listOrder}
             // onChange={onChange}
-            rowKey="accountID"
+            rowKey="foodID"
           />
         </Col>
       </Row>
-      <UserViewDetail
-        setDataViewDetail={setDataViewDetail}
-        setOpenViewDetail={setOpenViewDetail}
-        dataViewDetail={dataViewDetail}
-        openViewDetail={openViewDetail}
-      />
-      <UserModelCreate
-        openModalCreate={openModalCreate}
-        setOpenModalCreate={setOpenModalCreate}
-        fetchUsers={fetchUsers}
-      />
-      <UserModalUpdate
+      <OrderModalUpdate
         openModalUpdate={openModalUpdate}
         setOpenModalUpdate={setOpenModalUpdate}
-        fetchUsers={fetchUsers}
         dataUpdate={dataUpdate}
-        setDataUpdate={setDataUpdate}
-      />
-      <UserImport
-        openModalImport={openModalImport}
-        setOpenModalImport={setOpenModalImport}
+        fetchOrder={fetchOrder}
       />
     </>
   );
 };
 
-export default UserTable;
+export default Order;

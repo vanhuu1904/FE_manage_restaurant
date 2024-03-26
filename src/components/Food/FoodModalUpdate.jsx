@@ -27,11 +27,11 @@ const FoodModalUpdate = (props) => {
     setIsSubmit(true);
     const res = await updateFood({ id, name, price, status, image });
     setIsSubmit(false);
-    console.log(">>>check res: ", res);
+    ">>>check res: ", res;
     if (res && res.EC === 0) {
-      message.success("Update user thành công");
+      message.success("Update food thành công");
       setOpenModalUpdate(false);
-      await props.fetchUsers();
+      await props.fetchFoods();
     } else {
       notification.error(res.EM);
     }
