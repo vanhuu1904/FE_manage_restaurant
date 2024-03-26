@@ -5,6 +5,7 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { doAddFoodAction } from "../../redux/order/orderSlice";
+import { useNavigate } from "react-router-dom";
 
 const ViewDetail = (props) => {
   const { dataFood } = props;
@@ -13,6 +14,7 @@ const ViewDetail = (props) => {
   const [currentQuantity, setCurrentQuantity] = useState(1);
   const refGallery = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onChange = (value) => {
     console.log("changed", value);
   };
@@ -38,6 +40,7 @@ const ViewDetail = (props) => {
   };
   const handleBuy = () => {
     handleAddToCart(currentQuantity, dataFood);
+    navigate("/order");
   };
   return (
     <div style={{ background: "#efefef", padding: "20px 0" }}>

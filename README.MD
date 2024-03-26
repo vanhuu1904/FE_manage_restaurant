@@ -20,6 +20,10 @@
 
 ![Alt text](./src/assets/importExcel.png)
 
+<h2>Xem chi tiết đồ ăn</h2>
+
+![Alt text](./src/assets/viewFood.png)
+
 <h2>Xem lịch sử đặt hàng</h2>
 
 ![Alt text](./src/assets/viewOrder.png)

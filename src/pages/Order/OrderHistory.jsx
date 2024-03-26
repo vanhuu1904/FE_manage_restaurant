@@ -170,7 +170,15 @@ const OrderHistory = () => {
   ];
   if (+account?.groupWithRoles?.id === 3) {
     items.unshift({
-      label: <Link to="admin">Trang quản trị</Link>,
+      label: (
+        <label
+          onClick={() => {
+            navigate("/admin");
+          }}
+        >
+          Trang quản trị
+        </label>
+      ),
       key: "admin",
     });
   }

@@ -21,9 +21,14 @@ export const accountSlide = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
+      console.log(">>>check user: ", action.payload);
       state.isAuthenticated = true;
       state.isLoading = false;
-      state.user = action.payload.user;
+      state.user = {
+        username: action.payload.user.username,
+        name: action.payload.user.name,
+        id: action.payload.user.id,
+      };
       state.groupWithRoles = action.payload.groupWithRoles;
     },
     doGetAccountAction: (state, action) => {
@@ -31,7 +36,7 @@ export const accountSlide = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      console.log(">>>>check user getAccount: ", action.payload.name);
+      console.log(">>>>check user getAccount: ", action.payload);
       state.isAuthenticated = true;
       state.isLoading = false;
       state.user = {
@@ -49,7 +54,6 @@ export const accountSlide = createSlice({
       state.user = {
         username: "",
         name: "",
-        groupWithRoles: {},
         id: "",
       };
       state.groupWithRoles = {};

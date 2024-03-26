@@ -63,6 +63,7 @@ const LayoutAdmin = () => {
 
   const handleLogout = async () => {
     const res = await logout();
+    console.log(">>>check res: ", res);
     if (res && res.data) {
       dispatch(doLogoutAction());
       message.success("Đăng xuất thành công");
